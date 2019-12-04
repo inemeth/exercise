@@ -1,0 +1,94 @@
+<div class="container-fluid">
+
+  <div class="m-3 col-6">
+    <div class="input-group">
+      <input #searchTextBox
+             id="searchTextBox"
+             type="text"
+             class="form-control"
+             [value]="searchExpression"
+             (keyup)="searchExpressionChanged(searchTextBox.value)">
+      <div class="input-group-append">
+        <span class="input-group-text fa fa-search"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-3 bg-light">
+    <div class="btn-toolbar justify-content-between" role="toolbar">
+      <div class="btn-group" role="group">
+        <div class="dropdown" dropdown>
+          <button dropdownToggle type="button" class="btn btn-light dropdown-toggle">
+            <span>Filter By: </span>
+            <span *ngIf="typeFilter.getValue() === null">All Media</span>
+            <span *ngIf="typeFilter.getValue() !== null">{{ typeFilter.getValue() }}</span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem">
+              <a class="dropdown-item"
+                 href="#"
+                 [ngClass]="{'active': typeFilter.getValue() === null}"
+                 (click)="typeFilterChanged(null)">
+                All Media
+              </a>
+            </li>
+            <li role="menuitem"
+                *ngFor="let enum of MediaType | keyvalue">
+              <a class="dropdown-item"
+                 href="#"
+                 [ngClass]="{'active': typeFilter.getValue() === enum.value}"
+                 (click)="typeFilterChanged(enum.value)">
+                {{ enum.value }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="dropdown" dropdown>
+          <button dropdownToggle type="button" class="btn btn-light dropdown-toggle">
+            <span>Sort by: </span>
+            <span>{{ typeSorter.getValue() }}</span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"
+                *ngFor="let enum of SorterField | keyvalue">
+              <a class="dropdown-item"
+                 href="#" [ngClass]="{'active': typeSorter.getValue() === enum.value}"
+                 (click)="typeSorterChanged(enum.value)">
+                {{ enum.value }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button"
+                class="btn btn-link"
+                (click)="clearFilters()">
+                <span class="fa fa-times-circle-o mr-2"></span>
+                <span>Clear</span>
+        </button>
+        <button type="button"
+                class="btn btn-link"
+                (click)="reverseOrder()">
+                <span class="fa"
+                      [ngClass]="{'fa-sort-amount-asc': ascendingOrder.getValue(), 'fa-sort-amount-desc': !ascendingOrder.getValue()}">
+
+                </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-3">
+    <table class="table">
+      <tbody>
+        <tr *ngFor="let mediaItem of filteredAndSortedMediaItems">
+          <td style="width: 10vw">{{ mediaItem.name }}</td>
+          <td style="width: 10vw">{{ mediaItem.mediaType }}</td>
+          <td style="width: 10vw">{{ mediaItem.uploadDate | date}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
